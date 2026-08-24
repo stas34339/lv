@@ -94,14 +94,11 @@
 
         function sendData() {
             try {
-                // Если открыли не с той кнопки, скажем об этом
-                if (!tg.initDataUnsafe || !tg.initDataUnsafe.query_id) {
-                    alert("Упс! Чтобы сохранить билет, нужно открыть анкету через кнопку ВНИЗУ экрана (вместо клавиатуры).");
-                    return;
-                }
+                // Отправляем данные (работает только если открыто с нижней кнопки)
                 tg.sendData(JSON.stringify({ status: "accepted" }));
             } catch(e) {
-                alert("Ошибка: " + e.message);
+                // Если вдруг Телеграм заблокирует отправку, мы увидим причину
+                alert("Ошибка Телеграма: " + e.message);
             }
         }
     </script>
