@@ -266,9 +266,25 @@
         });
 
         function sendData() {
-            // Отправляем сигнал боту, что она согласилась и забрала билет
-            tg.sendData(JSON.stringify({ status: "accepted" })); 
+    try {
+        // Проверяем, поддерживает ли текущий запуск отправку данных
+        if (!tg.initDataUnsafe || !tg.initDataUnsafe.query_id && !tg.initDataUnsafe.hash) {
+            alert("Телеграм блокирует отправку! Убедись, что открыл анкету через кнопку ВНИЗУ экрана (вместо клавиатуры), а не под сообщением.");
+            return;
         }
+
+        const data = JSON.stringify({ status: "accepted" });
+        tg.sendData(data);
+        
+        // На всякий случай дублируем команду на закрытие
+        setTimeout(() => {
+            tg.close();
+        }, 500);
+
+    } catch (e) {
+        alert("Произошла ошибка: " + e.message);
+    }
+}
     </script>
 </body>
 </html>
