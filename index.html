@@ -16,7 +16,6 @@
         .slide.active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Стили для стикеров */
         .bear-sticker { height: 130px; object-fit: contain; margin-bottom: 10px; filter: drop-shadow(0 4px 10px rgba(215, 122, 140, 0.15)); }
         
         h1 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--dark-pink); margin: 0 0 10px 0; }
@@ -27,7 +26,6 @@
         .btn-outline { background: transparent; color: var(--dark-pink); border: 1px solid var(--accent-pink); box-shadow: none; padding: 12px 25px; }
         #btn-no { transition: left 0.3s ease, top 0.3s ease; }
         
-        /* Дизайн билета */
         .ticket-wrapper { overflow: hidden; padding: 10px 0; width: 100%; display: flex; flex-direction: column; align-items: center; }
         .ticket { background: #fff; border-radius: 15px; width: 270px; padding: 20px; box-shadow: 0 10px 30px rgba(215, 122, 140, 0.15); border: 2px dashed var(--accent-pink); transform: translateY(150px); opacity: 0; transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; }
         .slide.active .ticket.show-ticket { transform: translateY(0); opacity: 1; }
@@ -41,9 +39,9 @@
 <body>
     <div class="bg-hearts"></div>
 
-    <!-- ЭКРАН 1: Вопрос (Мишка с цветком) -->
+    <!-- ЭКРАН 1 -->
     <div class="slide active" id="step-0">
-        <img src="https://i.pinimg.com/originals/82/c4/34/82c43422db7e5b22b272fdfdf9eb3e85.gif" class="bear-sticker" alt="Мишка дарит цветок">
+        <img src="1.gif" class="bear-sticker" alt="Мишка дарит цветок">
         <h1>Привет ✨</h1>
         <p>Я тут подумал... не хочешь ли ты сходить со мной на свидание?</p>
         <div class="btn-container">
@@ -52,26 +50,26 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 2: Реакция (Счастливые мишки) -->
+    <!-- ЭКРАН 2 -->
     <div class="slide" id="step-1">
-        <img src="https://i.pinimg.com/originals/30/84/c6/3084c6eeea39e03c153831ea2fb0a6c6.gif" class="bear-sticker" alt="Радостные мишки">
+        <img src="2.gif" class="bear-sticker" alt="Радостные мишки">
         <h1>Я очень рад! ❤️</h1>
         <p>Честно говоря, я так и думал, но всё равно безумно приятно это слышать. Ты сделала мой день!</p>
         <button class="btn" onclick="nextSlide(2)">Что дальше?</button>
     </div>
 
-    <!-- ЭКРАН 3: Намек на место (Мишки пьют кофе) -->
+    <!-- ЭКРАН 3 -->
     <div class="slide" id="step-2">
-        <img src="https://i.pinimg.com/originals/a1/38/c5/a138c5f590e82c5a2c26279f22847c0b.gif" class="bear-sticker" alt="Мишки в кафе">
+        <img src="3.gif" class="bear-sticker" alt="Мишки в кафе">
         <h1>Небольшой спойлер...</h1>
         <p>Мы пойдем в одно очень красивое и эстетичное кафе с невероятной атмосферой. Тебе точно понравится 🤫</p>
         <button class="btn" onclick="showTicketSlide()">Посмотреть детали</button>
     </div>
 
-    <!-- ЭКРАН 4: Выезжающий билет (Мишки целуются) -->
+    <!-- ЭКРАН 4 -->
     <div class="slide" id="step-3">
         <div class="ticket-wrapper">
-            <img src="https://i.pinimg.com/originals/a0/0a/6f/a00a6fdbdcad680cd7a912d0ff12bcfd.gif" class="bear-sticker" style="height: 100px;" alt="Мишки обнимаются">
+            <img src="4.gif" class="bear-sticker" style="height: 100px;" alt="Мишки обнимаются">
             <div class="ticket" id="magic-ticket">
                 <h2>Invitation</h2>
                 <div class="ticket-row"><span class="ticket-label">Дата:</span><span class="ticket-value">26.08.26</span></div>
