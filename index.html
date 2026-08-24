@@ -4,175 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Приглашение</title>
-    <!-- API Telegram -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Романтичные шрифты -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #fdfbfb;
-            --accent-pink: #ffb6c1;
-            --dark-pink: #d77a8c;
-            --text-dark: #5a4a4e;
-            --text-light: #8e7f83;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #fff0f3 0%, #fdfbfb 100%);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Важно, чтобы убегающая кнопка не создавала скролл */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            position: relative;
-        }
-
-        /* Декоративные сердечки на фоне */
-        .bg-hearts {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="%23ffb6c1" opacity="0.1"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
-            background-size: 60px 60px;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .slide {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            width: 100%;
-            padding: 30px;
-            box-sizing: border-box;
-            z-index: 1;
-            animation: fadeIn 0.8s ease-out forwards;
-            opacity: 0;
-        }
-
-        .slide.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 32px;
-            font-weight: 600;
-            color: var(--dark-pink);
-            margin-bottom: 15px;
-        }
-
-        p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: var(--text-dark);
-            margin-bottom: 30px;
-            max-width: 320px;
-        }
-
-        /* Кнопки */
-        .btn-container {
-            display: flex;
-            gap: 15px;
-            position: relative; /* Для убегающей кнопки */
-            width: 100%;
-            justify-content: center;
-            height: 50px;
-        }
-
-        .btn {
-            background: var(--accent-pink);
-            color: #fff;
-            border: none;
-            padding: 12px 35px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .btn:active { transform: scale(0.95); }
-        
-        .btn-outline {
-            background: transparent;
-            color: var(--dark-pink);
-            border: 1px solid var(--accent-pink);
-            box-shadow: none;
-        }
-
-        /* Убегающая кнопка */
-        #btn-no {
-            transition: left 0.3s ease, top 0.3s ease;
-        }
-
-        /* Дизайн билета */
-        .ticket-wrapper {
-            overflow: hidden;
-            padding: 20px 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-
-        .ticket {
-            background: #fff;
-            border-radius: 15px;
-            width: 280px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(215, 122, 140, 0.15);
-            border: 2px dashed var(--accent-pink);
-            transform: translateY(150px);
-            opacity: 0;
-            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
-            position: relative;
-        }
-
-        /* Класс для анимации выезда билета */
-        .slide.active .ticket.show-ticket {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .ticket h2 {
-            font-family: 'Cormorant Garamond', serif;
-            color: var(--dark-pink);
-            margin: 0 0 15px 0;
-            font-size: 24px;
-            border-bottom: 1px solid #ffe6ea;
-            padding-bottom: 10px;
-        }
-
-        .ticket-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 14px;
-            text-align: left;
-        }
-        
+        :root { --bg-color: #fdfbfb; --accent-pink: #ffb6c1; --dark-pink: #d77a8c; --text-dark: #5a4a4e; --text-light: #8e7f83; }
+        body { font-family: 'Montserrat', sans-serif; background: linear-gradient(135deg, #fff0f3 0%, #fdfbfb 100%); color: var(--text-dark); margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; position: relative; }
+        .bg-hearts { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="%23ffb6c1" opacity="0.1"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'); background-size: 60px 60px; z-index: 0; pointer-events: none; }
+        .slide { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 100%; padding: 30px; box-sizing: border-box; z-index: 1; animation: fadeIn 0.8s ease-out forwards; opacity: 0; }
+        .slide.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h1 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: var(--dark-pink); margin-bottom: 15px; }
+        p { font-size: 16px; line-height: 1.6; margin-bottom: 30px; max-width: 320px; }
+        .btn-container { display: flex; gap: 15px; position: relative; width: 100%; justify-content: center; height: 50px; }
+        .btn { background: var(--accent-pink); color: #fff; border: none; padding: 12px 35px; border-radius: 25px; font-size: 16px; font-weight: 500; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4); font-family: 'Montserrat', sans-serif; }
+        .btn-outline { background: transparent; color: var(--dark-pink); border: 1px solid var(--accent-pink); box-shadow: none; }
+        #btn-no { transition: left 0.3s ease, top 0.3s ease; }
+        .ticket-wrapper { overflow: hidden; padding: 20px 0; width: 100%; display: flex; justify-content: center; }
+        .ticket { background: #fff; border-radius: 15px; width: 280px; padding: 25px; box-shadow: 0 10px 30px rgba(215, 122, 140, 0.15); border: 2px dashed var(--accent-pink); transform: translateY(150px); opacity: 0; transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; }
+        .slide.active .ticket.show-ticket { transform: translateY(0); opacity: 1; }
+        .ticket h2 { font-family: 'Cormorant Garamond', serif; color: var(--dark-pink); margin: 0 0 15px 0; font-size: 24px; border-bottom: 1px solid #ffe6ea; padding-bottom: 10px; }
+        .ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; text-align: left; }
         .ticket-label { color: var(--text-light); font-weight: 500; }
         .ticket-value { font-weight: 600; color: var(--text-dark); }
         .ticket-text { margin-top: 15px; font-size: 14px; font-style: italic; color: var(--dark-pink); }
     </style>
 </head>
 <body>
-
     <div class="bg-hearts"></div>
 
-    <!-- ЭКРАН 1: Вопрос (Убегающая кнопка) -->
     <div class="slide active" id="step-0">
         <h1>Привет ✨</h1>
         <p>Я тут подумал... не хочешь ли ты сходить со мной на свидание?</p>
@@ -182,41 +41,26 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 2: Реакция -->
     <div class="slide" id="step-1">
         <h1>Я очень рад! ❤️</h1>
         <p>Честно говоря, я так и думал, но всё равно безумно приятно это слышать. Ты сделала мой день!</p>
         <button class="btn" onclick="nextSlide(2)">Что дальше?</button>
     </div>
 
-    <!-- ЭКРАН 3: Намек на место -->
     <div class="slide" id="step-2">
         <h1>Небольшой спойлер...</h1>
-        <p>Я не буду раскрывать все карты, но намекну: мы пойдем в одно очень красивое и эстетичное кафе с невероятной атмосферой. Тебе точно понравится 🤫</p>
+        <p>Мы пойдем в одно очень красивое и эстетичное кафе с невероятной атмосферой. Тебе точно понравится 🤫</p>
         <button class="btn" onclick="showTicketSlide()">Посмотреть детали</button>
     </div>
 
-    <!-- ЭКРАН 4: Выезжающий билет -->
     <div class="slide" id="step-3">
         <div class="ticket-wrapper">
             <div class="ticket" id="magic-ticket">
                 <h2>Invitation</h2>
-                <div class="ticket-row">
-                    <span class="ticket-label">Дата:</span>
-                    <span class="ticket-value">26.08.26</span>
-                </div>
-                <div class="ticket-row">
-                    <span class="ticket-label">Время:</span>
-                    <span class="ticket-value">19:00</span>
-                </div>
-                <div class="ticket-row">
-                    <span class="ticket-label">Дресс-код:</span>
-                    <span class="ticket-value">Быть красиво одетой</span>
-                </div>
-                <div class="ticket-row">
-                    <span class="ticket-label">Настроение:</span>
-                    <span class="ticket-value">Самое лучшее</span>
-                </div>
+                <div class="ticket-row"><span class="ticket-label">Дата:</span><span class="ticket-value">26.08.26</span></div>
+                <div class="ticket-row"><span class="ticket-label">Время:</span><span class="ticket-value">19:00</span></div>
+                <div class="ticket-row"><span class="ticket-label">Дресс-код:</span><span class="ticket-value">Быть красиво одетой</span></div>
+                <div class="ticket-row"><span class="ticket-label">Настроение:</span><span class="ticket-value">Самое лучшее</span></div>
                 <div class="ticket-text">Просто будь готова, а остальное я беру на себя. Жди меня! ❤️</div>
             </div>
         </div>
@@ -232,59 +76,34 @@
             document.getElementById('step-' + step).classList.add('active');
         }
 
-        // Специальная функция для показа слайда с билетом (добавляет класс для анимации)
         function showTicketSlide() {
             nextSlide(3);
-            setTimeout(() => {
-                document.getElementById('magic-ticket').classList.add('show-ticket');
-            }, 50); // Небольшая задержка для плавности CSS-перехода
+            setTimeout(() => { document.getElementById('magic-ticket').classList.add('show-ticket'); }, 50);
         }
 
-        // Логика убегающей кнопки
         const noBtn = document.getElementById('btn-no');
-        
         function moveButton() {
-            // Переводим кнопку в absolute, чтобы она могла летать по экрану
             noBtn.style.position = 'absolute';
-            
-            // Вычисляем безопасные координаты, чтобы кнопка не улетела за экран
             const maxX = window.innerWidth - noBtn.offsetWidth - 20;
             const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-            
-            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
-            
-            noBtn.style.left = randomX + 'px';
-            noBtn.style.top = randomY + 'px';
+            noBtn.style.left = Math.max(10, Math.floor(Math.random() * maxX)) + 'px';
+            noBtn.style.top = Math.max(10, Math.floor(Math.random() * maxY)) + 'px';
         }
-
-        // Срабатывает при наведении мышки (ПК) или касании (Смартфон)
         noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Предотвращаем клик
-            moveButton();
-        });
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
 
         function sendData() {
-    try {
-        // Проверяем, поддерживает ли текущий запуск отправку данных
-        if (!tg.initDataUnsafe || !tg.initDataUnsafe.query_id && !tg.initDataUnsafe.hash) {
-            alert("Телеграм блокирует отправку! Убедись, что открыл анкету через кнопку ВНИЗУ экрана (вместо клавиатуры), а не под сообщением.");
-            return;
+            try {
+                // Если открыли не с той кнопки, скажем об этом
+                if (!tg.initDataUnsafe || !tg.initDataUnsafe.query_id) {
+                    alert("Упс! Чтобы сохранить билет, нужно открыть анкету через кнопку ВНИЗУ экрана (вместо клавиатуры).");
+                    return;
+                }
+                tg.sendData(JSON.stringify({ status: "accepted" }));
+            } catch(e) {
+                alert("Ошибка: " + e.message);
+            }
         }
-
-        const data = JSON.stringify({ status: "accepted" });
-        tg.sendData(data);
-        
-        // На всякий случай дублируем команду на закрытие
-        setTimeout(() => {
-            tg.close();
-        }, 500);
-
-    } catch (e) {
-        alert("Произошла ошибка: " + e.message);
-    }
-}
     </script>
 </body>
 </html>
