@@ -2,49 +2,45 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Приглашение на свидание</title>
-    <!-- Подключаем библиотеку Telegram -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Приглашение</title>
+    <!-- API Telegram -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Подключаем элегантный шрифт -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Романтичные шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Строгий темный фон и циановые/синие акценты */
-            --bg-color: #0A0A0E;
-            --accent-cyan: #00e5ff;
-            --accent-blue: #0057ff;
-            --text-main: #f0f0f0;
-            --text-muted: #8892b0;
+            --bg-color: #fdfbfb;
+            --accent-pink: #ffb6c1;
+            --dark-pink: #d77a8c;
+            --text-dark: #5a4a4e;
+            --text-light: #8e7f83;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background: linear-gradient(135deg, #fff0f3 0%, #fdfbfb 100%);
+            color: var(--text-dark);
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Чтобы не было скролла */
+            overflow: hidden; /* Важно, чтобы убегающая кнопка не создавала скролл */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            position: relative;
         }
 
-        /* Фоновое свечение для атмосферы */
-        .ambient-glow {
+        /* Декоративные сердечки на фоне */
+        .bg-hearts {
             position: absolute;
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(0,87,255,0.12) 0%, rgba(10,10,14,0) 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="%23ffb6c1" opacity="0.1"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+            background-size: 60px 60px;
             z-index: 0;
             pointer-events: none;
         }
 
-        /* Настройка слайдов */
         .slide {
             display: none;
             flex-direction: column;
@@ -55,7 +51,7 @@
             padding: 30px;
             box-sizing: border-box;
             z-index: 1;
-            animation: fadeIn 0.7s ease-out forwards;
+            animation: fadeIn 0.8s ease-out forwards;
             opacity: 0;
         }
 
@@ -64,182 +60,214 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Типографика */
         h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 32px;
             font-weight: 600;
-            font-size: 24px;
+            color: var(--dark-pink);
             margin-bottom: 15px;
-            color: var(--text-main);
-            text-shadow: 0 0 15px rgba(0, 229, 255, 0.25);
         }
 
         p {
-            font-weight: 300;
-            font-size: 15px;
+            font-size: 16px;
             line-height: 1.6;
-            color: var(--text-muted);
+            color: var(--text-dark);
             margin-bottom: 30px;
             max-width: 320px;
         }
 
-        .highlight {
-            color: var(--accent-cyan);
-            font-weight: 400;
-        }
-
-        /* Карточки с вариантами ответов */
-        .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(0, 229, 255, 0.1);
-            border-radius: 12px;
-            padding: 18px;
-            margin-bottom: 15px;
+        /* Кнопки */
+        .btn-container {
+            display: flex;
+            gap: 15px;
+            position: relative; /* Для убегающей кнопки */
             width: 100%;
-            max-width: 280px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
+            justify-content: center;
+            height: 50px;
         }
 
-        .card:hover, .card:active {
-            border-color: var(--accent-cyan);
-            background: rgba(0, 229, 255, 0.08);
-            box-shadow: 0 0 20px rgba(0, 87, 255, 0.3);
-            transform: scale(1.03);
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 400;
-            margin: 0;
-            color: var(--accent-cyan);
-        }
-
-        /* Кнопка */
-        .btn-start {
-            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+        .btn {
+            background: var(--accent-pink);
             color: #fff;
             border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
+            padding: 12px 35px;
+            border-radius: 25px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0, 229, 255, 0.25);
-            transition: all 0.3s;
-            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        .btn-start:hover {
-            box-shadow: 0 5px 25px rgba(0, 229, 255, 0.5);
-            transform: scale(1.05);
+        .btn:active { transform: scale(0.95); }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--dark-pink);
+            border: 1px solid var(--accent-pink);
+            box-shadow: none;
         }
+
+        /* Убегающая кнопка */
+        #btn-no {
+            transition: left 0.3s ease, top 0.3s ease;
+        }
+
+        /* Дизайн билета */
+        .ticket-wrapper {
+            overflow: hidden;
+            padding: 20px 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .ticket {
+            background: #fff;
+            border-radius: 15px;
+            width: 280px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(215, 122, 140, 0.15);
+            border: 2px dashed var(--accent-pink);
+            transform: translateY(150px);
+            opacity: 0;
+            transition: all 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+        }
+
+        /* Класс для анимации выезда билета */
+        .slide.active .ticket.show-ticket {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .ticket h2 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--dark-pink);
+            margin: 0 0 15px 0;
+            font-size: 24px;
+            border-bottom: 1px solid #ffe6ea;
+            padding-bottom: 10px;
+        }
+
+        .ticket-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            text-align: left;
+        }
+        
+        .ticket-label { color: var(--text-light); font-weight: 500; }
+        .ticket-value { font-weight: 600; color: var(--text-dark); }
+        .ticket-text { margin-top: 15px; font-size: 14px; font-style: italic; color: var(--dark-pink); }
     </style>
 </head>
 <body>
 
-    <div class="ambient-glow"></div>
+    <div class="bg-hearts"></div>
 
-    <!-- ЭКРАН 1: Приветствие -->
+    <!-- ЭКРАН 1: Вопрос (Убегающая кнопка) -->
     <div class="slide active" id="step-0">
-        <h1>Специально для тебя ✨</h1>
-        <p>Говорят, самые красивые вечера начинаются с правильного выбора. Но мой лучший выбор — это твои <span class="highlight">светлые волосы</span> и невероятные <span class="highlight">серо-зеленые глаза</span>, в которых хочется раствориться.</p>
-        <p>Я подготовил для нас кое-что особенное. Поможешь мне с деталями?</p>
-        <button class="btn-start" onclick="nextSlide(1)">Начать</button>
+        <h1>Привет ✨</h1>
+        <p>Я тут подумал... не хочешь ли ты сходить со мной на свидание?</p>
+        <div class="btn-container">
+            <button class="btn" onclick="nextSlide(1)">Да, с радостью!</button>
+            <button class="btn btn-outline" id="btn-no" style="position: relative;">Нет</button>
+        </div>
     </div>
 
-    <!-- ЭКРАН 2: Вайб -->
+    <!-- ЭКРАН 2: Реакция -->
     <div class="slide" id="step-1">
-        <h1>Атмосфера вечера</h1>
-        <p>Какое настроение тебе сегодня ближе?</p>
-        
-        <div class="card" onclick="selectOption('vibe', 'Уютная романтика', 2)">
-            <p class="card-title">Уютная романтика</p>
-        </div>
-        <div class="card" onclick="selectOption('vibe', 'Огни ночного города', 2)">
-            <p class="card-title">Огни ночного города</p>
-        </div>
-        <div class="card" onclick="selectOption('vibe', 'Пусть будет сюрприз', 2)">
-            <p class="card-title">Пусть это будет сюрприз</p>
-        </div>
+        <h1>Я очень рад! ❤️</h1>
+        <p>Честно говоря, я так и думал, но всё равно безумно приятно это слышать. Ты сделала мой день!</p>
+        <button class="btn" onclick="nextSlide(2)">Что дальше?</button>
     </div>
 
-    <!-- ЭКРАН 3: Еда / Напитки -->
+    <!-- ЭКРАН 3: Намек на место -->
     <div class="slide" id="step-2">
-        <h1>Вкусы и эстетика</h1>
-        <p>Что идеально дополнит нашу встречу?</p>
-        
-        <div class="card" onclick="selectOption('food', 'Изящные бокалы вина', 3)">
-            <p class="card-title">Изящные бокалы вина</p>
-        </div>
-        <div class="card" onclick="selectOption('food', 'Ароматный кофе', 3)">
-            <p class="card-title">Ароматный кофе и десерт</p>
-        </div>
-        <div class="card" onclick="selectOption('food', 'Вкусный ужин', 3)">
-            <p class="card-title">Что-то сытное и вкусное</p>
-        </div>
+        <h1>Небольшой спойлер...</h1>
+        <p>Я не буду раскрывать все карты, но намекну: мы пойдем в одно очень красивое и эстетичное кафе с невероятной атмосферой. Тебе точно понравится 🤫</p>
+        <button class="btn" onclick="showTicketSlide()">Посмотреть детали</button>
     </div>
 
-    <!-- ЭКРАН 4: Время -->
+    <!-- ЭКРАН 4: Выезжающий билет -->
     <div class="slide" id="step-3">
-        <h1>Время встречи</h1>
-        <p>Когда мне заехать за тобой?</p>
-        
-        <div class="card" onclick="selectOption('time', 'Пятница вечер', 4)">
-            <p class="card-title">В эту пятницу вечером</p>
+        <div class="ticket-wrapper">
+            <div class="ticket" id="magic-ticket">
+                <h2>Invitation</h2>
+                <div class="ticket-row">
+                    <span class="ticket-label">Дата:</span>
+                    <span class="ticket-value">26.08.26</span>
+                </div>
+                <div class="ticket-row">
+                    <span class="ticket-label">Время:</span>
+                    <span class="ticket-value">19:00</span>
+                </div>
+                <div class="ticket-row">
+                    <span class="ticket-label">Дресс-код:</span>
+                    <span class="ticket-value">Быть красиво одетой</span>
+                </div>
+                <div class="ticket-row">
+                    <span class="ticket-label">Настроение:</span>
+                    <span class="ticket-value">Самое лучшее</span>
+                </div>
+                <div class="ticket-text">Просто будь готова, а остальное я беру на себя. Жди меня! ❤️</div>
+            </div>
         </div>
-        <div class="card" onclick="selectOption('time', 'Суббота', 4)">
-            <p class="card-title">В субботу</p>
-        </div>
-        <div class="card" onclick="selectOption('time', 'Решим попозже', 4)">
-            <p class="card-title">Скажу чуть позже</p>
-        </div>
-    </div>
-
-    <!-- ЭКРАН 5: Финал -->
-    <div class="slide" id="step-4">
-        <h1>Всё готово 🖤</h1>
-        <p>Анкета заполнена. Твой идеальный вечер уже начинает воплощаться в реальность.</p>
-        <button class="btn-start" onclick="sendData()">Отправить приглашение</button>
+        <button class="btn" style="margin-top: 25px;" onclick="sendData()">Сохранить билет</button>
     </div>
 
     <script>
-        // Инициализируем API Telegram
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Открываем приложение на весь экран телефона
+        tg.expand(); 
 
-        // Объект для сбора ответов
-        const surveyData = {
-            vibe: "",
-            food: "",
-            time: ""
-        };
-
-        // Логика переключения экранов
         function nextSlide(step) {
             document.querySelectorAll('.slide').forEach(el => el.classList.remove('active'));
             document.getElementById('step-' + step).classList.add('active');
         }
 
-        // Запись ответа и переход дальше
-        function selectOption(category, value, nextStep) {
-            surveyData[category] = value;
-            
-            // Задержка 300мс, чтобы она успела увидеть эффект нажатия (hover/active)
+        // Специальная функция для показа слайда с билетом (добавляет класс для анимации)
+        function showTicketSlide() {
+            nextSlide(3);
             setTimeout(() => {
-                nextSlide(nextStep);
-            }, 300);
+                document.getElementById('magic-ticket').classList.add('show-ticket');
+            }, 50); // Небольшая задержка для плавности CSS-перехода
         }
 
-        // Отправка итогового JSON в C# бота
+        // Логика убегающей кнопки
+        const noBtn = document.getElementById('btn-no');
+        
+        function moveButton() {
+            // Переводим кнопку в absolute, чтобы она могла летать по экрану
+            noBtn.style.position = 'absolute';
+            
+            // Вычисляем безопасные координаты, чтобы кнопка не улетела за экран
+            const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+            const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+            
+            const randomX = Math.max(10, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(10, Math.floor(Math.random() * maxY));
+            
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        // Срабатывает при наведении мышки (ПК) или касании (Смартфон)
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Предотвращаем клик
+            moveButton();
+        });
+
         function sendData() {
-            const jsonData = JSON.stringify(surveyData);
-            tg.sendData(jsonData); 
-            // После выполнения tg.sendData окно Telegram Web App закроется автоматически
+            // Отправляем сигнал боту, что она согласилась и забрала билет
+            tg.sendData(JSON.stringify({ status: "accepted" })); 
         }
     </script>
 </body>
