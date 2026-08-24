@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение на свидание</title>
+    <!-- Подключаем библиотеку Telegram -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Подключаем элегантный шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Строгий темный фон и циановые/синие акценты */
+            --bg-color: #0A0A0E;
+            --accent-cyan: #00e5ff;
+            --accent-blue: #0057ff;
+            --text-main: #f0f0f0;
+            --text-muted: #8892b0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Чтобы не было скролла */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Фоновое свечение для атмосферы */
+        .ambient-glow {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(0,87,255,0.12) 0%, rgba(10,10,14,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Настройка слайдов */
+        .slide {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            padding: 30px;
+            box-sizing: border-box;
+            z-index: 1;
+            animation: fadeIn 0.7s ease-out forwards;
+            opacity: 0;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Типографика */
+        h1 {
+            font-weight: 600;
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            text-shadow: 0 0 15px rgba(0, 229, 255, 0.25);
+        }
+
+        p {
+            font-weight: 300;
+            font-size: 15px;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            max-width: 320px;
+        }
+
+        .highlight {
+            color: var(--accent-cyan);
+            font-weight: 400;
+        }
+
+        /* Карточки с вариантами ответов */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 229, 255, 0.1);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 280px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .card:hover, .card:active {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 229, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 87, 255, 0.3);
+            transform: scale(1.03);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 400;
+            margin: 0;
+            color: var(--accent-cyan);
+        }
+
+        /* Кнопка */
+        .btn-start {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            color: #fff;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 229, 255, 0.25);
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-start:hover {
+            box-shadow: 0 5px 25px rgba(0, 229, 255, 0.5);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow"></div>
+
+    <!-- ЭКРАН 1: Приветствие -->
+    <div class="slide active" id="step-0">
+        <h1>Специально для тебя ✨</h1>
+        <p>Говорят, самые красивые вечера начинаются с правильного выбора. Но мой лучший выбор — это твои <span class="highlight">светлые волосы</span> и невероятные <span class="highlight">серо-зеленые глаза</span>, в которых хочется раствориться.</p>
+        <p>Я подготовил для нас кое-что особенное. Поможешь мне с деталями?</p>
+        <button class="btn-start" onclick="nextSlide(1)">Начать</button>
+    </div>
+
+    <!-- ЭКРАН 2: Вайб -->
+    <div class="slide" id="step-1">
+        <h1>Атмосфера вечера</h1>
+        <p>Какое настроение тебе сегодня ближе?</p>
+        
+        <div class="card" onclick="selectOption('vibe', 'Уютная романтика', 2)">
+            <p class="card-title">Уютная романтика</p>
+        </div>
+        <div class="card" onclick="selectOption('vibe', 'Огни ночного города', 2)">
+            <p class="card-title">Огни ночного города</p>
+        </div>
+        <div class="card" onclick="selectOption('vibe', 'Пусть будет сюрприз', 2)">
+            <p class="card-title">Пусть это будет сюрприз</p>
+        </div>
+    </div>
+
+    <!-- ЭКРАН 3: Еда / Напитки -->
+    <div class="slide" id="step-2">
+        <h1>Вкусы и эстетика</h1>
+        <p>Что идеально дополнит нашу встречу?</p>
+        
+        <div class="card" onclick="selectOption('food', 'Изящные бокалы вина', 3)">
+            <p class="card-title">Изящные бокалы вина</p>
+        </div>
+        <div class="card" onclick="selectOption('food', 'Ароматный кофе', 3)">
+            <p class="card-title">Ароматный кофе и десерт</p>
+        </div>
+        <div class="card" onclick="selectOption('food', 'Вкусный ужин', 3)">
+            <p class="card-title">Что-то сытное и вкусное</p>
+        </div>
+    </div>
+
+    <!-- ЭКРАН 4: Время -->
+    <div class="slide" id="step-3">
+        <h1>Время встречи</h1>
+        <p>Когда мне заехать за тобой?</p>
+        
+        <div class="card" onclick="selectOption('time', 'Пятница вечер', 4)">
+            <p class="card-title">В эту пятницу вечером</p>
+        </div>
+        <div class="card" onclick="selectOption('time', 'Суббота', 4)">
+            <p class="card-title">В субботу</p>
+        </div>
+        <div class="card" onclick="selectOption('time', 'Решим попозже', 4)">
+            <p class="card-title">Скажу чуть позже</p>
+        </div>
+    </div>
+
+    <!-- ЭКРАН 5: Финал -->
+    <div class="slide" id="step-4">
+        <h1>Всё готово 🖤</h1>
+        <p>Анкета заполнена. Твой идеальный вечер уже начинает воплощаться в реальность.</p>
+        <button class="btn-start" onclick="sendData()">Отправить приглашение</button>
+    </div>
+
+    <script>
+        // Инициализируем API Telegram
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Открываем приложение на весь экран телефона
+
+        // Объект для сбора ответов
+        const surveyData = {
+            vibe: "",
+            food: "",
+            time: ""
+        };
+
+        // Логика переключения экранов
+        function nextSlide(step) {
+            document.querySelectorAll('.slide').forEach(el => el.classList.remove('active'));
+            document.getElementById('step-' + step).classList.add('active');
+        }
+
+        // Запись ответа и переход дальше
+        function selectOption(category, value, nextStep) {
+            surveyData[category] = value;
+            
+            // Задержка 300мс, чтобы она успела увидеть эффект нажатия (hover/active)
+            setTimeout(() => {
+                nextSlide(nextStep);
+            }, 300);
+        }
+
+        // Отправка итогового JSON в C# бота
+        function sendData() {
+            const jsonData = JSON.stringify(surveyData);
+            tg.sendData(jsonData); 
+            // После выполнения tg.sendData окно Telegram Web App закроется автоматически
+        }
+    </script>
+</body>
+</html>
